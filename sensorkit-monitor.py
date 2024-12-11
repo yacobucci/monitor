@@ -153,13 +153,14 @@ def main():
         logger.debug('getting mean sea level pressure for altimeter calibration')
 
         handler = OpenMeteoHandler()
-        url_get(state, location, params, handler.handle_response)
+        url_get(logger, state, location, params, handler.handle_response)
         logger.debug('calibration pressure stored: %s', state.altimeter_calibration)
 
         logger.debug('adding calibration job to scheduler')
 
         #XXX make objects so can configure with data from config
         scheduler.add_job(url_get, 'interval', minutes=interval, kwargs = {
+            'logger': logger,
             'state': state,
             'url': location,
             'params': params,

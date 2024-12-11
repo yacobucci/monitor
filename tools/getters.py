@@ -5,22 +5,21 @@ import urllib.request
 
 from sensorkit import datastructures
 
-logger = logging.getLogger(__name__)
 
-def url_get(state: datastructures.StateInterface, url: str, params: dict,
+def url_get(logger, state: datastructures.StateInterface, url: str, params: dict,
             handler: callable) -> None:
     endpoint = url + urllib.parse.urlencode(params)
 
     logger.debug('calling api endpoint %s', endpoint)
     contents = urllib.request.urlopen(endpoint)
-    handler(state, contents)
+    handler(logger, state, contents)
 
 class OpenMeteoHandler:
     def __init__(self):
         pass
 
     # XXX add typing information for contents
-    def handle_response(self, state: datastructures.StateInterface, contents) -> None:
+    def handle_response(self, logger, state: datastructures.StateInterface, contents) -> None:
         logger.debug('open_meteo_handler called with status %s', contents.status)
 
         if contents.status != 200:
