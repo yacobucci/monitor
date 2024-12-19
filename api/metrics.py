@@ -1,12 +1,10 @@
 import abc
 import logging
 
-from prometheus_client import Counter, Gauge, generate_latest
+from prometheus_client import Gauge, generate_latest
 from starlette.responses import Response
 
 from sensorkit import constants
-from sensorkit import devices
-from sensorkit import devicetree
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +33,7 @@ class PrometheusExporter(MetricsInterface):
 
     async def export(self, request) -> Response:
         tree = request.app.state.tree
-        for meter in tree.meters():
+        for meter in tree.meters(lambda node: not bool(node.metadata.is_virtual)):
             if meter.measurement not in dynamic_gauges:
                 dimension = constants.to_capability_strings[meter.measurement]
 
