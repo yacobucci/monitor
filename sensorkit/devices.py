@@ -85,14 +85,13 @@ class Device(DeviceInterface):
     @property
     def bus_id(self) -> int:
         r = 0
-        if 'channel_switch' in self._bus.__dict__:
+        if self._bus is not None and 'channel_switch' in self._bus.__dict__:
             n = int.from_bytes(self._bus.channel_switch, 'little')
             while n > 1:
                 n = n >> 1
                 r = r + 1
         return r
 
-# XXX move away from i2c as only bus
 class VirtualDevice(Device):
     def __init__(self, name: str, board: int, capabilities: list[int],
                  address: int = constants.VIRTUAL_ADDR):

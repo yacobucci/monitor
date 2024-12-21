@@ -174,6 +174,15 @@ class DeviceTree:
         for node in PreOrderIter(self._root, __decorate_filter(_filter)):
             yield node.obj
 
+    # simple wrapper for anytree
+    def findall(self, filter_=None):
+        from anytree import findall as anytree_findall
+        found = anytree_findall(self._root, filter_)
+        objects = list()
+        for f in found:
+            objects.append(f.obj)
+        return objects
+
     # XXX puke, need to add some logging, but keeping the print template for now
     def add(self, name, obj, typ, **kwargs) -> Node:
         #print('DEBUG {}'.format(type(obj)))

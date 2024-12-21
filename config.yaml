@@ -26,17 +26,23 @@ sensorkit:
         - temperature
         - relative_humidity
       args:
-        interval: PT10M30S
+        interval: PT1M
         params:
           longitude: -105.1230315
           latitude: 39.7592537
           timezone: America/Denver
   calibrations:
     bmp390:
-      measures:
-        - pressure_msl
-      #required-source: open-meteo
-      policy: average
+      - measurement: pressure_msl
+        target:
+          #method: sea_level_pressure
+          property: sea_level_pressure
+          where: real # or on the object interface 'abstract'
+        source:
+          device: open-meteo-current
+        policy:
+          aggregation: average
+          interval: PT1M # or 'once'
 #   scd41:
 #      measures:
 #        - altitude

@@ -136,12 +136,6 @@ class Bmp390Altitude(Meter):
         self._real_device = device.real_device
         self._store = store
 
-        bmp = self._real_device
-        self._default = bmp.sea_level_pressure
-        self._key = 'pressure_msl'
-
-        self._store.add_key_listener(self._key, self.store_callback)
-
     @property
     def measure(self) -> float:
         bmp = self._real_device
@@ -158,27 +152,6 @@ class Bmp390Altitude(Meter):
     @property
     def real_device(self):
         return self._real_device
-
-    @property
-    def sea_level_pressure(self):
-        bmp = self._real_device
-        return bmp.sea_level_pressure
-
-    @sea_level_pressure.setter
-    def sea_level_pressure(self, msl: float):
-        bmp = self._real_device
-        bmp.sea_level_pressure = msl
-
-    def store_callback(self, key: str, value: typing.Any) -> None:
-        if key != 'pressure_msl':
-            return
-
-        bmp = self._real_device
-        if value != bmp.sea_level_pressure:
-            if value is None:
-                bmp.sea_level_pressure = self._default
-            else:
-                bmp.sea_level_pressure = value
 # END BMP390
 
 #
